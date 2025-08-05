@@ -1,26 +1,44 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateCommentDto } from './dto/create-comment.dto';
-import { UpdateCommentDto } from './dto/update-comment.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { BlogComment } from './entities/comment.entity';
+import { BlogPostService } from 'src/blog-post/blog-post.service';
 
 @Injectable()
 export class CommentService {
-  create(createCommentDto: CreateCommentDto) {
-    return 'This action adds a new comment';
+  constructor(
+    @InjectRepository(BlogComment)
+    private blogCommentRepository: Repository<BlogComment>,
+    private blogPostService: BlogPostService,
+  ) {}
+
+  async create(createCommentDto: CreateCommentDto) {
+    let blogPost;
+    try {
+      blogPost = await this.blogPostService.findOne(
+        createCommentDto.blogPostId,
+      );
+    } catch (e) {
+      if (!blogPost) {
+        throw new BadRequestException(
+          `Blog post with id ${createCommentDto.blogPostId} not found`,
+        );
+      }
+    }
+
+    const comment = new BlogComment();
+    comment.content = createCommentDto.content;
+    comment.blogPost = blogPost;
+
+    return await this.blogCommentRepository.save(comment);
   }
 
-  findAll() {
-    return `This action returns all comment`;
+  async findAll() {
+    return this.blogCommentRepository.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} comment`;
-  }
-
-  update(id: number, updateCommentDto: UpdateCommentDto) {
-    return `This action updates a #${id} comment`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} comment`;
+  async findOne(id: number) {
+    return await this.blogCommentRepository.findOne({ where: { id } });
   }
 }
