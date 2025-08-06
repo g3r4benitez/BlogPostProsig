@@ -1,6 +1,8 @@
 # Coding Challenge - Backend Engineer: Prosig
 Author: Gerardo Benitez
+
 Github User: github.com/g3r4benitez
+
 Linkedin: https://www.linkedin.com/in/gerardobenitez/
 
 ## Description
