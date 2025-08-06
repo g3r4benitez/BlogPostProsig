@@ -10,7 +10,7 @@ This RESTful API let manage a simple blogging platform. Include managin blog pos
 
 ## About the project
 ### Arquitecture
-  1. API RESTfull created using NestJs 
+  1. API RESTfull created with NestJs 
   2. N-Tier Arquitecture
   - Controllers
   - Services
