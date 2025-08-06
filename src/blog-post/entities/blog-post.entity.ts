@@ -1,5 +1,5 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { BlogComment } from '../../comment/entities/comment.entity';
+import { BlogComment } from './blog-comment.entity';
 
 @Entity('blog_post')
 export class BlogPost {
@@ -12,8 +12,9 @@ export class BlogPost {
   @Column()
   content: string;
 
-  @OneToMany(() => BlogComment, (comment) => comment.blogPost, {
-    cascade: true,
-  })
+  @Column({ default: 0 })
+  total_coments: number;
+
+  @OneToMany(() => BlogComment, (comment) => comment.blogPost)
   comments: BlogComment[];
 }

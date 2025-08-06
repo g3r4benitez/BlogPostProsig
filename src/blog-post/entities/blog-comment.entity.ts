@@ -1,4 +1,3 @@
-import { BlogPost } from '../../blog-post/entities/blog-post.entity';
 import {
   Column,
   Entity,
@@ -6,6 +5,7 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { BlogPost } from './blog-post.entity';
 
 @Entity('comment')
 export class BlogComment {
@@ -15,7 +15,7 @@ export class BlogComment {
   @Column()
   content: string;
 
-  @ManyToOne(() => BlogPost)
-  @JoinColumn()
+  @ManyToOne(() => BlogPost, (blogPost) => blogPost.comments)
+  @JoinColumn({ name: 'blogPostId' })
   blogPost: BlogPost;
 }
